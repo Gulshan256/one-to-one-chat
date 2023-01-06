@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block body %}
+
+<h1>Messages To @{{friend.name}}</h1>
+
+<div id="messages">
+  <!-- messages will be displayed here -->
+
+  {% for msg in messages %}
+{% if friend.id == msg.recipient_id %}
+<li>@you &nbsp{{msg.message_text}}</li>
+{% else %}
+<li>@{{friend.name}}&nbsp {{msg.message_text}}</li>
+  {% endif %}
+  {% endfor %}
+</div>
+
+<form id="send-message-form">
+  <label for="message">Message:</label>
+  <input type="text" name="message" id="message" />
+  <input type="submit" value="Send" />
+</form>
+
+<script>
+  const socket = io("http://192.168.29.71:5000");
+  console.log(socket);
+  const friend_id = "{{friend.id}} ";
+  console.log("{{friend.name}} ",friend_id);
+  // Listen for new messages from the server
+  socket.on("new_message", (data) => {
+    // Append the new message to the messages element
+    const messagesElement = document.getElementById("messages");
+    messagesElement.innerHTML += `<p>${data.message}</p>`;
+  });
+
+  // Send the message to the server when the form is submitted
+  const form = document.getElementById("send-message-form");
+  form.addEventListener("submit", (event) => {
+    // event.preventDefault();
+    const message = form.elements["message"].value;
+    socket.emit("send_message", { friend_id:friend_id,message: message });
+    console.log('message ',message);
+  });
+</script>
+
+<!-- <script>
+    const socket = io('http://127.0.0.1:5000/messages/<friend_id>');
+    // Get the URL of the current page
+    const url = new URL(window.location.href);
+
+    function getFriendIdFromUrl() {
+  const re = /\/messages\/(\d+)/;
+  const result = re.exec(window.location.pathname);
+  return result ? result[1] : null;
+}
+
+const friendId = getFriendIdFromUrl();
+console.log(friendId); // outputs the friend_id value if it exists, or null otherwise
+
+
+    const form = document.getElementById('message-form');
+    form.addEventListener('submit', (event) => {
+      // event.preventDefault();
+   
+      console.log('friendId: ',friendId);
+    //   socket.emit('send_message', data);
+      socket.emit('send_message', {'friend_id': friendId, 'message': form.elements['message'].value});
+
+    });
+
+
+    socket.on('new_message', (data) => {
+  // Append the new message to the message list
+  const messageList = document.getElementById('message-list');
+  const newMessage = document.createElement('li');
+  newMessage.innerText = data.message;
+  messageList.appendChild(newMessage);
+});
+  </script> -->
+
+{% endblock body %}

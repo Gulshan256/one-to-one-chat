@@ -1,0 +1,17 @@
+{% extends "base.html" %} 
+{% block body %}
+
+<div class="list-group">
+    <h1>Hello @{{user.name}} </h1>
+    <br>
+    <h3>Friends</h3>
+    {% for frnd in friends %}
+
+    <a href="/messages/{{frnd.id}}" class="list-group-item list-group-item-action">@{{frnd.name}}</a>
+
+    {% endfor %}
+
+  
+
+</div>
+{% endblock body %}

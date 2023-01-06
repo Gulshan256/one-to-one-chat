@@ -1,0 +1,41 @@
+{% extends "base.html" %} 
+{% block body %}
+
+  <form id="signup-form" method="POST" >
+      <label for="username">Username:</label><br>
+      <input type="text" id="username" name="username" required><br>
+      <label for="email">Email:</label><br>
+      <input type="email" id="email" name="email" required><br>
+      <label for="password">Password:</label><br>
+      <input type="password" id="password" name="password" required><br><br>
+      <label for="Conform_password">Conform Password:</label><br>
+      <input type="password" id="Conform_password" name="Conform_password" required><br><br>
+      <input type="submit" value="Submit">
+  </form>
+
+  <!-- <script>
+    const socket = io("http://127.0.0.1:5000/signup");
+
+    const form = document.getElementById("signup-form");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const data = {
+        name: form.elements["name"].value,
+        email: form.elements["email"].value,
+        password: form.elements["password"].value,
+      };
+      socket.emit("signup", data);
+
+      socket.emit("check_signup", data);
+      console.log("Signup Client Data:", data);
+    });
+    socket.emit("signup_success", (data) => {
+      console.log("Signup successful! Client ID:", data.id);
+    });
+    socket.on("signup_failure", () => {
+      console.log("Signup failed");
+    });
+  </script> -->
+
+{% endblock body %}
